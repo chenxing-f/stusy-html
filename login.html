@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>表单验证01</title>
+	</head>
+	<body>
+		<!--
+        	表单验证：
+				（1）用户名不能为空
+				（2）用户名必须在6-14位之间
+				（3）用户名只能有数字和字母组成，不能含有其它符号（正则表达式）
+				（4）密码和确认密码一致，邮箱地址合法
+				（5）统一失去焦点验证
+				（6）错误提示信息统一在span标签中提示，并且要求字体12号，红色。
+				（7）文本框再次获得焦点后，清空错误提示信息，如果文本框中数据不合法要求清空文本框的 value
+				（8）最终表单中所有项均合法方可提交
+        -->
+        <script type="text/javascript">
+        	window.onload = function sd(){
+        		//document.getElementById("btn").onclick = function(){
+        		
+        		function name(){
+        			var flag = true;
+        			//用户名不能为空
+        			if(document.getElementById("username").value == ""){
+        				document.getElementById("span1").innerText = "用户名不能为空！";
+        				flag = false;
+        				
+        			}
+        			//用户名必须在6-14位之间
+        			if(document.getElementById("username").value.length<6 || document.getElementById("username").value.length>14 ){
+        				document.getElementById("span1").innerText = "用户名必须在6-14位之间";
+        				flag = false;
+        			}
+        			//用户名只能有数字和字母组成，不能含有其它符号（正则表达式）
+        			var regExp1 = /^[A-Za-z0-9]{0,}$/;
+        			if(!regExp1.test(document.getElementById("username").value )){
+        				document.getElementById("span1").innerText = "用户名只能有数字和字母组成，不能含有其它符号";
+        				flag = false;
+        			}
+        			return flag;
+        		}
+        		document.getElementById("username").onblur = name;
+        		
+        		
+        		
+        		
+        		function word1() {
+        			
+        			//密码和确认密码一致，邮箱地址合法
+        			if(document.getElementById("dbpassword").value!=document.getElementById("password").value) {
+        				document.getElementById("span2").innerText = "前后密码不一致，请重新输入";
+        				return false;
+        			}else if(document.getElementById("dbpassword").value==""){
+        				document.getElementById("span2").innerText = "密码不能为空";
+        				return false;
+        			}else{
+        				return true;
+        			}
+        			
+        		}
+        		document.getElementById("dbpassword").onblur = word1;
+        		
+        		
+        		function mail1(){
+        			var regExp2 = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        			if(!regExp2.test(document.getElementById("email").value)) {
+        				document.getElementById("span3").innerText = "邮箱格式不正确";
+        				return false;
+        			}else{
+        				return true;
+        			}
+        			
+        		}
+        		document.getElementById("email").onblur = mail1;
+        			
+        		//文本框再次获得焦点后，清空错误提示信息，如果文本框中数据不合法要求清空文本框的 value
+        		document.getElementById("username").onfocus = function(){
+        			document.getElementById("span1").innerText = "";
+        			//用户名必须在6-14位之间
+        			if(document.getElementById("username").value.length<6 || document.getElementById("username").value.length>14 ){
+        				document.getElementById("username").value = "";
+        				
+        			}
+        			//用户名只能有数字和字母组成，不能含有其它符号（正则表达式）
+        			var regExp1 = /^[A-Za-z0-9]{0,}$/;
+        			if(!regExp1.test(document.getElementById("username").value )){
+        				document.getElementById("username").value = "";
+        				
+        			}
+        			
+        		}
+        		document.getElementById("dbpassword").onfocus = function(){
+        			document.getElementById("span2").innerText = "";
+        			//密码和确认密码一致，邮箱地址合法
+        			if(document.getElementById("dbpassword").value!=document.getElementById("password").value) {
+        				document.getElementById("dbpassword").value = "";
+        			}
+        			
+        		}
+        		document.getElementById("email").onfocus = function(){
+        			document.getElementById("span3").innerText = "";
+        			var regExp2 = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        			if(!regExp2.test(document.getElementById("email").value)) {
+        				document.getElementById("email").value = "";
+        			}
+        		}
+        		
+        		//最终表单中所有项均合法方可提交
+        		document.getElementById("btn").onclick = function(){
+        			//方法一
+        			//if(name()&&word1()&&mail1()){
+        				//用方法提交  form 的 submit()方法
+        			//	document.getElementById("myform").submit();
+        			//}
+        			
+        			//方法二
+        			
+        			//触发username，dbpassword,email 的 blur
+        			//不需要人工操作，使用纯JS代码触发事件
+        			document.getElementById("username").focus();
+        			document.getElementById("username").blur();
+        			document.getElementById("dbpassword").focus();
+        			document.getElementById("dbpassword").blur();
+        			document.getElementById("email").focus();
+        			document.getElementById("email").blur();
+        			if(document.getElementById("span1").innerText==""&&document.getElementById("span3").innerText==""&&document.getElementById("span2").innerText ==""){
+        				//用方法提交  form 的 submit()方法
+        				document.getElementById("myform").submit();
+        			}
+        			
+        		}
+        	//}
+        }
+        </script>
+        <form action="http://www.baidu.com:8080/save" id="myform">
+        <table >
+		
+			<tr>
+				<td>用户名</td>
+				<td><input type="text" id="username" name="username"/><span style="color: red;font-size: 12px;" id="span1"></span></td>
+			</tr>
+			<tr>
+				<td>邮箱</td>
+				<td><input type="text" id="email" name="email"/><span style="color: red;font-size: 12px;" id="span3"></td>
+			</tr>
+			<tr>
+				<td>密码</td>
+				<td><input type="password" id="password" name="password" /></td>
+			</tr>
+			<tr>
+				<td>确认密码</td>
+				<td><input type="password" id="dbpassword" /><span style="color: red;font-size: 12px;" id="span2"></span></td>
+			</tr>
+			<tr>
+				<td colspan="2" ><input type="button" value="注册" id="btn" />&nbsp;&nbsp;<input type="reset" value="重置"  /></td>
+				
+			</tr>
+		</table>
+		</form>
+	</body>
+	
+</html>
